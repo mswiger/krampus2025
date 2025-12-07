@@ -1,0 +1,6 @@
+[submodule "lib/cosmos"]
+	path = lib/cosmos
+	url = https://github.com/mswiger/cosmos
+[submodule "lib/construct"]
+	path = lib/construct
+	url = https://github.com/mswiger/construct.git
