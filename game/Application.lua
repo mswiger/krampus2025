@@ -4,6 +4,7 @@ local constants = require("game.constants")
 local PlayerConstruct = require("game.constructs.PlayerConstruct")
 
 local BoostSystem = require("game.systems.BoostSystem")
+local DeathSystem = require("game.systems.DeathSystem")
 local GravitySystem = require("game.systems.GravitySystem")
 local MovementSystem = require("game.systems.MovementSystem")
 local RenderingSystem = require("game.systems.RenderingSystem")
@@ -43,6 +44,7 @@ local Application = class {
     self.cosmos = Cosmos()
 
     self.cosmos:addSystems("boost", BoostSystem(self.assets))
+    self.cosmos:addSystems("update", DeathSystem(self.assets))
     self.cosmos:addSystems("update", GravitySystem())
     self.cosmos:addSystems("update", MovementSystem())
     self.cosmos:addSystems("update", PipeSystem(self.assets))
