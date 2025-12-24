@@ -10,6 +10,7 @@ local MovementSystem = require("game.systems.MovementSystem")
 local RenderingSystem = require("game.systems.RenderingSystem")
 local PhysicsDebugSystem = require("game.systems.PhysicsDebugSystem")
 local PipeSystem = require("game.systems.PipeSystem")
+local TrashManagementSystem = require("game.systems.TrashManagementSystem")
 local TweenSystem = require("game.systems.TweenSystem")
 
 local Application = class {
@@ -48,6 +49,7 @@ local Application = class {
     self.cosmos:addSystems("update", GravitySystem())
     self.cosmos:addSystems("update", MovementSystem())
     self.cosmos:addSystems("update", PipeSystem(self.assets))
+    self.cosmos:addSystems("update", TrashManagementSystem(self.assets))
     self.cosmos:addSystems("update", TweenSystem())
     self.cosmos:addSystems("draw", RenderingSystem())
     self.cosmos:addSystems("draw", PhysicsDebugSystem(self.debug))

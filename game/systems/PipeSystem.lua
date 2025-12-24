@@ -16,14 +16,14 @@ local PipeSystem = class {
   process = function(self, entities, commands, dt)
     local lastPipeX = 0
     for _, entity in ipairs(entities) do
-      entity[Position].x = entity[Position].x + (constants.PIPE_VELOCITY * dt)
+      entity[Position].x = entity[Position].x + (constants.HORIZONTAL_VELOCITY * dt)
       lastPipeX = math.max(lastPipeX, entity[Position].x + self.drawable:getWidth())
     end
 
     if constants.INTERNAL_RES_W - (lastPipeX + self.drawable:getWidth()) >= constants.PIPE_INTERVAL then
       local spawnY = math.random(
         constants.PIPE_MIN_SIZE,
-        constants.INTERNAL_RES_H - constants.PIPE_MIN_SIZE - constants.PIPE_GAP + 1
+        constants.INTERNAL_RES_H - constants.PIPE_MIN_SIZE - constants.PIPE_GAP
       )
       commands:spawn(PipeConstruct({
         x = constants.INTERNAL_RES_W + self.drawable:getWidth(),
