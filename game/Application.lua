@@ -14,6 +14,9 @@ local Application = class {
     love.graphics.setDefaultFilter("nearest", "nearest")
 
     self.assets = AssetManager()
+    self.music = self.assets:get("assets/bgm.mp3")
+    self.music:setLooping(true)
+    self.music:play()
 
     local scaleFactor = math.min(
       love.graphics.getWidth() / self.INTERNAL_RES_W,
