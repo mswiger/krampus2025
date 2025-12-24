@@ -6,7 +6,12 @@ local RenderingSystem = class {
 
   process = function(_, entities)
     for _, entity in ipairs(entities) do
-      love.graphics.draw(entity[Graphic], entity[Position].x, entity[Position].y)
+      love.graphics.draw(
+        entity[Graphic].drawable,
+        entity[Position].x,
+        entity[Position].y,
+        entity[Graphic].rotation
+      )
     end
   end,
 }
