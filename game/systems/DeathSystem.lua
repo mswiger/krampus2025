@@ -7,6 +7,8 @@ local Position = require("game.components.Position")
 local Trash = require("game.components.Trash")
 local Velocity = require("game.components.Velocity")
 
+local TextConstruct = require("game.constructs.TextConstruct")
+
 local function getRotatedRectangle(x, y, width, height, angle)
   local cosa, sina = math.cos(angle), math.sin(angle)
 
@@ -36,7 +38,7 @@ local DeathSystem = class {
     self.assets = assets
   end,
 
-  process = function(self, entities)
+  process = function(self, entities, commands)
     local player = entities.player[1]
     local pipes = entities.pipes
     local trash = entities.trash
@@ -74,22 +76,29 @@ local DeathSystem = class {
         (playerBB.x2 >= pipeBB.x1 and playerBB.x2 <= pipeBB.x2 and playerBB.y2 >= pipeBB.y1 and playerBB.y2 <= pipeBB.y2) or
         (playerBB.x1 >= pipeBB.x1 and playerBB.x1 <= pipeBB.x2 and playerBB.y2 >= pipeBB.y1 and playerBB.y2 <= pipeBB.y2)
       ) then
-        self:killPlayer(player)
+        self:killPlayer(player, commands)
       end
     end
 
     for _, t in ipairs(trash) do
       if t[Position].x + t[Graphic].drawable:getWidth() < 0 then
-        self:killPlayer(player)
+        self:killPlayer(player, commands)
       end
     end
   end,
 
-  killPlayer = function(self, player)
+  killPlayer = function(self, player, commands)
     player[Player].dead = true
     player[Velocity].x = 0
     player[Velocity].y = constants.TERMINAL_VELOCITY
     self.assets:get("assets/boom.mp3"):play()
+    commands:spawn(TextConstruct({
+      value = "Game Over\nPress F5 to try again!",
+      align = "center",
+      x = 0,
+      y = constants.INTERNAL_RES_H / 2,
+      color = { 1, 0, 0, 1 },
+    }))
   end,
 }
 

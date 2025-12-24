@@ -9,6 +9,7 @@ local DeathSystem = require("game.systems.DeathSystem")
 local GravitySystem = require("game.systems.GravitySystem")
 local MovementSystem = require("game.systems.MovementSystem")
 local RenderingSystem = require("game.systems.RenderingSystem")
+local ResetGameSystem = require("game.systems.ResetGameSystem")
 local PhysicsDebugSystem = require("game.systems.PhysicsDebugSystem")
 local PipeSystem = require("game.systems.PipeSystem")
 local TextRenderingSystem = require("game.systems.TextRenderingSystem")
@@ -31,6 +32,7 @@ local Application = class {
       controls = {
         boost = { "key:space" },
         debugPhysics = { "key:f9" },
+        reset = { "key:f5" },
       },
     }
 
@@ -48,6 +50,7 @@ local Application = class {
     self.cosmos = Cosmos()
 
     self.cosmos:addSystems("boost", BoostSystem(self.assets))
+    self.cosmos:addSystems("reset", ResetGameSystem(self.assets))
     self.cosmos:addSystems("update", DeathSystem(self.assets))
     self.cosmos:addSystems("update", GravitySystem())
     self.cosmos:addSystems("update", MovementSystem())
@@ -69,6 +72,10 @@ local Application = class {
 
     if self.input:pressed("boost") then
       self.cosmos:emit("boost")
+    end
+
+    if self.input:pressed("reset") then
+      self.cosmos:emit("reset")
     end
 
     if self.input:pressed("debugPhysics") then

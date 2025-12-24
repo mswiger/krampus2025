@@ -2,6 +2,7 @@ local constants = require("game.constants")
 
 local Graphic = require("game.components.Graphic")
 local Pipe = require("game.components.Pipe")
+local Player = require("game.components.Player")
 local Position = require("game.components.Position")
 local Trash = require("game.components.Trash")
 
@@ -10,6 +11,7 @@ local TrashConstruct = require("game.constructs.TrashConstruct")
 local TrashManagementSystem = class {
   query = {
     pipes = { Graphic, Pipe, Position },
+    player = { Player },
     trash = { Graphic, Position, Trash },
   },
 
@@ -24,6 +26,11 @@ local TrashManagementSystem = class {
   process = function(self, entities, commands, dt)
     local trash = entities.trash
     local pipes = entities.pipes
+    local player = entities.player[1]
+
+    if not player or player[Player].dead then
+      return
+    end
 
     for _, entity in ipairs(trash) do
       entity[Position].x = entity[Position].x + (constants.HORIZONTAL_VELOCITY * dt)
