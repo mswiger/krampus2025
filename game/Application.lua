@@ -24,6 +24,15 @@ local Application = class {
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.setDefaultFilter("nearest", "nearest")
 
+    local config = ini.load("config.ini")
+    if config then
+      local curW, curH, curFlags = love.window.getMode()
+      local resW = ini.readKey(config, "graphics", "width") or curW
+      local resH = ini.readKey(config, "graphics", "height") or curH
+      local fullscreen = ini.readKey(config, "graphics", "fullscreen") == "true" or curFlags.fullscreen
+      love.window.setMode(resW, resH, { fullscreen = fullscreen })
+    end
+
     self.debug = {
       physics = false,
     }
@@ -88,7 +97,7 @@ local Application = class {
     end
 
     if self.input:pressed("toggleFullscreen") then
-      w, h, flags = love.window.getMode()
+      local w, h, flags = love.window.getMode()
       love.window.setMode(w, h, { fullscreen = not flags.fullscreen })
 
       local scaleFactor = math.min(
