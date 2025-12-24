@@ -2,6 +2,8 @@ local AssetManager = require("game.AssetManager")
 
 local PlayerConstruct = require("game.constructs.PlayerConstruct")
 
+local GravitySystem = require("game.systems.GravitySystem")
+local MovementSystem = require("game.systems.MovementSystem")
 local RenderingSystem = require("game.systems.RenderingSystem")
 
 local Application = class {
@@ -21,7 +23,10 @@ local Application = class {
 
     self.cosmos = Cosmos()
 
+    self.cosmos:addSystems("update", GravitySystem())
+    self.cosmos:addSystems("update", MovementSystem())
     self.cosmos:addSystems("draw", RenderingSystem())
+
     self.cosmos:spawn(PlayerConstruct(self.assets))
   end,
 
