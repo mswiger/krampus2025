@@ -1,18 +1,18 @@
 local clamp = require("game.util.clamp")
+local constants = require("game.constants")
 
-local Graphic = require("game.components.Graphic")
 local Velocity = require("game.components.Velocity")
 
 local GravitySystem = class {
-  GRAVITY = 0.01,
-  TERMINAL_VELOCITY = 2,
+  query = { Velocity },
 
-  query = { Graphic, Velocity },
-
-  process = function(self, entities)
+  process = function(_, entities)
     for _, entity in ipairs(entities) do
-      entity[Velocity].y = clamp(entity[Velocity].y + self.GRAVITY, -self.TERMINAL_VELOCITY, self.TERMINAL_VELOCITY)
-      entity[Graphic].rotation = (entity[Velocity].y / self.TERMINAL_VELOCITY) * (math.pi / 2)
+      entity[Velocity].y = clamp(
+        entity[Velocity].y + constants.GRAVITY,
+        -constants.TERMINAL_VELOCITY,
+        constants.TERMINAL_VELOCITY
+      )
     end
   end,
 }

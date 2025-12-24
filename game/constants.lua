@@ -1,0 +1,5 @@
+return {
+  BOOST_AMOUNT = -1,
+  GRAVITY = 0.01,
+  TERMINAL_VELOCITY = 2,
+}
