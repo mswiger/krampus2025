@@ -54,6 +54,10 @@ local DeathSystem = class {
       y2 = player[Position].y + player[Graphic].drawable:getHeight(),
     }
 
+    if playerBB.y1 < 0 or playerBB.y2 > constants.INTERNAL_RES_H then
+      self:killPlayer(player, commands)
+    end
+
     for _, pipe in ipairs(pipes) do
       local x, y, w, h = getRotatedRectangle(
         pipe[Position].x,
