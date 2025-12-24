@@ -13,7 +13,7 @@ local function PlayerConstruct(assets)
       drawable = drawable,
       rotation = 0,
     },
-    [Player] = true,
+    [Player] = { dead = false },
     [Position] = { x = startX, y = startY },
     [Velocity] = { x = 0, y = 0 },
   }

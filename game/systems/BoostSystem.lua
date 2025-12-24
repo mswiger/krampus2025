@@ -13,7 +13,7 @@ local BoostSystem = class {
   process = function(self, entities)
     local player = entities[1]
 
-    if not player then
+    if not player or player[Player].dead then
       return
     end
 
