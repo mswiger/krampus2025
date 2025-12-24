@@ -6,7 +6,11 @@ local Velocity = require("game.components.Velocity")
 local BoostSystem = class {
   query = { Player, Velocity },
 
-  process = function(_, entities)
+  init = function(self, assets)
+    self.sound = assets:get("assets/boost.ogg")
+  end,
+
+  process = function(self, entities)
     local player = entities[1]
 
     if not player then
@@ -14,6 +18,7 @@ local BoostSystem = class {
     end
 
     player[Velocity].y = constants.BOOST_AMOUNT
+    love.audio.play(self.sound:clone())
   end,
 }
 

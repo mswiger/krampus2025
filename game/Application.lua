@@ -34,7 +34,7 @@ local Application = class {
 
     self.cosmos = Cosmos()
 
-    self.cosmos:addSystems("boost", BoostSystem())
+    self.cosmos:addSystems("boost", BoostSystem(self.assets))
     self.cosmos:addSystems("update", GravitySystem())
     self.cosmos:addSystems("update", MovementSystem())
     self.cosmos:addSystems("update", TweenSystem())
