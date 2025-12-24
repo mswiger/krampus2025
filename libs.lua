@@ -1,3 +1,4 @@
 class = require("lib.class")
-
+Camera = require("lib.camera")
+Construct = require("lib.construct")
 Cosmos = require("lib.cosmos")
