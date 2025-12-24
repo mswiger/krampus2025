@@ -4,6 +4,7 @@ local Graphic = require("game.components.Graphic")
 local Pipe = require("game.components.Pipe")
 local Player = require("game.components.Player")
 local Position = require("game.components.Position")
+local Trash = require("game.components.Trash")
 local Velocity = require("game.components.Velocity")
 
 local function getRotatedRectangle(x, y, width, height, angle)
@@ -24,11 +25,11 @@ local function getRotatedRectangle(x, y, width, height, angle)
   return nx, ny, width, height
 end
 
-
 local DeathSystem = class {
   query = {
     player = { Graphic, Player, Position, Velocity },
-    pipes = { Graphic, Pipe, Position }
+    pipes = { Graphic, Pipe, Position },
+    trash = { Graphic, Trash, Position },
   },
 
   init = function(self, assets)
@@ -38,6 +39,7 @@ local DeathSystem = class {
   process = function(self, entities)
     local player = entities.player[1]
     local pipes = entities.pipes
+    local trash = entities.trash
 
     if not player or player[Player].dead then
       return
@@ -72,13 +74,22 @@ local DeathSystem = class {
         (playerBB.x2 >= pipeBB.x1 and playerBB.x2 <= pipeBB.x2 and playerBB.y2 >= pipeBB.y1 and playerBB.y2 <= pipeBB.y2) or
         (playerBB.x1 >= pipeBB.x1 and playerBB.x1 <= pipeBB.x2 and playerBB.y2 >= pipeBB.y1 and playerBB.y2 <= pipeBB.y2)
       ) then
-        player[Player].dead = true
-        player[Velocity].x = 0
-        player[Velocity].y = constants.TERMINAL_VELOCITY
-        self.assets:get("assets/boom.mp3"):play()
+        self:killPlayer(player)
       end
     end
 
+    for _, t in ipairs(trash) do
+      if t[Position].x + t[Graphic].drawable:getWidth() < 0 then
+        self:killPlayer(player)
+      end
+    end
+  end,
+
+  killPlayer = function(self, player)
+    player[Player].dead = true
+    player[Velocity].x = 0
+    player[Velocity].y = constants.TERMINAL_VELOCITY
+    self.assets:get("assets/boom.mp3"):play()
   end,
 }
 
