@@ -11,7 +11,7 @@ local TweenSystem = class {
     for _, entity in ipairs(entities) do
       entity[Graphic].rotation = lerp(
         entity[Graphic].rotation,
-        (entity[Velocity].y / constants.TERMINAL_VELOCITY) * (math.pi / 2),
+        (entity[Velocity].y / constants.TERMINAL_VELOCITY) * (math.pi / 4),
         dt
       )
     end

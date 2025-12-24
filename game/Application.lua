@@ -1,4 +1,5 @@
 local AssetManager = require("game.AssetManager")
+local constants = require("game.constants")
 
 local PlayerConstruct = require("game.constructs.PlayerConstruct")
 
@@ -6,18 +7,25 @@ local BoostSystem = require("game.systems.BoostSystem")
 local GravitySystem = require("game.systems.GravitySystem")
 local MovementSystem = require("game.systems.MovementSystem")
 local RenderingSystem = require("game.systems.RenderingSystem")
+local PhysicsDebugSystem = require("game.systems.PhysicsDebugSystem")
+local PipeSystem = require("game.systems.PipeSystem")
 local TweenSystem = require("game.systems.TweenSystem")
 
 local Application = class {
-  INTERNAL_RES_W = 480,
-  INTERNAL_RES_H = 270,
-
   init = function(self)
+    math.randomseed(os.time())
+
+    love.graphics.setColor(1, 1, 1, 1)
     love.graphics.setDefaultFilter("nearest", "nearest")
+
+    self.debug = {
+      physics = false,
+    }
 
     self.input = baton.new {
       controls = {
         boost = { "key:space" },
+        debugPhysics = { "key:f9" },
       },
     }
 
@@ -27,18 +35,20 @@ local Application = class {
     self.music:play()
 
     local scaleFactor = math.min(
-      love.graphics.getWidth() / self.INTERNAL_RES_W,
-      love.graphics.getHeight() / self.INTERNAL_RES_H
+      love.graphics.getWidth() / constants.INTERNAL_RES_W,
+      love.graphics.getHeight() / constants.INTERNAL_RES_H
     )
-    self.camera = Camera(self.INTERNAL_RES_W / 2, self.INTERNAL_RES_H / 2, scaleFactor)
+    self.camera = Camera(constants.INTERNAL_RES_W / 2, constants.INTERNAL_RES_H / 2, scaleFactor)
 
     self.cosmos = Cosmos()
 
     self.cosmos:addSystems("boost", BoostSystem(self.assets))
     self.cosmos:addSystems("update", GravitySystem())
     self.cosmos:addSystems("update", MovementSystem())
+    self.cosmos:addSystems("update", PipeSystem(self.assets))
     self.cosmos:addSystems("update", TweenSystem())
     self.cosmos:addSystems("draw", RenderingSystem())
+    self.cosmos:addSystems("draw", PhysicsDebugSystem(self.debug))
 
     self.cosmos:spawn(PlayerConstruct(self.assets))
   end,
@@ -49,6 +59,10 @@ local Application = class {
 
     if self.input:pressed("boost") then
       self.cosmos:emit("boost")
+    end
+
+    if self.input:pressed("debugPhysics") then
+      self.debug.physics = not self.debug.physics
     end
   end,
 

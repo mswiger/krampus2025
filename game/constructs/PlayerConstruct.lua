@@ -4,13 +4,17 @@ local Position = require("game.components.Position")
 local Velocity = require("game.components.Velocity")
 
 local function PlayerConstruct(assets)
+  local startX = 32
+  local startY = 120
+  local drawable = assets:get("assets/raccoon.png")
+
   return Construct {
     [Graphic] = {
-      drawable = assets:get("assets/raccoon.png"),
+      drawable = drawable,
       rotation = 0,
     },
     [Player] = true,
-    [Position] = { x = 32, y = 120 },
+    [Position] = { x = startX, y = startY },
     [Velocity] = { x = 0, y = 0 },
   }
 end
