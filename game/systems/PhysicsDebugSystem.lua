@@ -1,5 +1,8 @@
+local constants = require("game.constants")
+
 local Graphic = require("game.components.Graphic")
 local Position = require("game.components.Position")
+local Trash = require("game.components.Trash")
 
 local function drawRotatedRectangle(mode, x, y, width, height, angle)
   local cosa, sina = math.cos(angle), math.sin(angle)
@@ -30,14 +33,25 @@ local PhysicsDebugSystem = class {
     love.graphics.setColor(1, 0, 0)
 
     for _, entity in ipairs(entities) do
-      drawRotatedRectangle(
-        "line",
-        entity[Position].x,
-        entity[Position].y,
-        entity[Graphic].drawable:getWidth(),
-        entity[Graphic].drawable:getHeight(),
-        entity[Graphic].rotation
-      )
+      if entity[Trash] then
+        drawRotatedRectangle(
+          "line",
+          entity[Position].x - constants.TRASH_LEEWAY,
+          entity[Position].y - constants.TRASH_LEEWAY,
+          entity[Graphic].drawable:getWidth() + (constants.TRASH_LEEWAY * 2),
+          entity[Graphic].drawable:getHeight() + (constants.TRASH_LEEWAY * 2),
+          entity[Graphic].rotation
+        )
+      else
+        drawRotatedRectangle(
+          "line",
+          entity[Position].x,
+          entity[Position].y,
+          entity[Graphic].drawable:getWidth(),
+          entity[Graphic].drawable:getHeight(),
+          entity[Graphic].rotation
+        )
+      end
     end
 
     love.graphics.setColor(1, 1, 1, 1)
