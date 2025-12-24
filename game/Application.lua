@@ -2,6 +2,7 @@ local AssetManager = require("game.AssetManager")
 local constants = require("game.constants")
 
 local PlayerConstruct = require("game.constructs.PlayerConstruct")
+local ScoreConstruct = require("game.constructs.ScoreConstruct")
 
 local BoostSystem = require("game.systems.BoostSystem")
 local DeathSystem = require("game.systems.DeathSystem")
@@ -10,6 +11,7 @@ local MovementSystem = require("game.systems.MovementSystem")
 local RenderingSystem = require("game.systems.RenderingSystem")
 local PhysicsDebugSystem = require("game.systems.PhysicsDebugSystem")
 local PipeSystem = require("game.systems.PipeSystem")
+local TextRenderingSystem = require("game.systems.TextRenderingSystem")
 local TrashCollectionSystem = require("game.systems.TrashCollectionSystem")
 local TrashManagementSystem = require("game.systems.TrashManagementSystem")
 local TweenSystem = require("game.systems.TweenSystem")
@@ -54,9 +56,11 @@ local Application = class {
     self.cosmos:addSystems("update", TrashManagementSystem(self.assets))
     self.cosmos:addSystems("update", TweenSystem())
     self.cosmos:addSystems("draw", RenderingSystem())
+    self.cosmos:addSystems("draw", TextRenderingSystem(self.assets))
     self.cosmos:addSystems("draw", PhysicsDebugSystem(self.debug))
 
     self.cosmos:spawn(PlayerConstruct(self.assets))
+    self.cosmos:spawn(ScoreConstruct(0))
   end,
 
   update = function(self, dt)

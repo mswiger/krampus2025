@@ -3,12 +3,15 @@ local constants = require("game.constants")
 local Graphic = require("game.components.Graphic")
 local Player = require("game.components.Player")
 local Position = require("game.components.Position")
+local Score = require("game.components.Score")
+local Text = require("game.components.Text")
 local Trash = require("game.components.Trash")
 local Velocity = require("game.components.Velocity")
 
 local TrashCollectionSystem = class {
   query = {
     player = { Graphic, Player, Position, Velocity },
+    score = { Score, Text },
     trash = { Graphic, Trash, Position }
   },
 
@@ -18,9 +21,10 @@ local TrashCollectionSystem = class {
 
   process = function(self, entities, commands)
     local player = entities.player[1]
+    local score = entities.score[1]
     local trash = entities.trash
 
-    if not player or player[Player].dead then
+    if not player or player[Player].dead or not score then
       return
     end
 
@@ -47,6 +51,8 @@ local TrashCollectionSystem = class {
       ) then
         commands:despawn(t)
         self.assets:get("assets/crunch.ogg"):play()
+        score[Score] = score[Score] + 1
+        score[Text].value = string.format("%d", score[Score])
       end
     end
 
