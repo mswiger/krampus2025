@@ -12,6 +12,7 @@ local function PlayerConstruct(assets)
     [Graphic] = {
       drawable = drawable,
       rotation = 0,
+      layer = 1,
     },
     [Player] = { dead = false },
     [Position] = { x = startX, y = startY },
