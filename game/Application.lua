@@ -31,8 +31,9 @@ local Application = class {
     self.input = baton.new {
       controls = {
         boost = { "key:space" },
-        debugPhysics = { "key:f9" },
         reset = { "key:f5" },
+        debugPhysics = { "key:f9" },
+        toggleFullscreen = { "key:f11" },
       },
     }
 
@@ -67,6 +68,10 @@ local Application = class {
   end,
 
   update = function(self, dt)
+    if love.keyboard.isDown("escape") then
+      love.event.quit()
+    end
+
     self.input:update()
     self.cosmos:emit("update", dt)
 
@@ -80,6 +85,17 @@ local Application = class {
 
     if self.input:pressed("debugPhysics") then
       self.debug.physics = not self.debug.physics
+    end
+
+    if self.input:pressed("toggleFullscreen") then
+      w, h, flags = love.window.getMode()
+      love.window.setMode(w, h, { fullscreen = not flags.fullscreen })
+
+      local scaleFactor = math.min(
+        love.graphics.getWidth() / constants.INTERNAL_RES_W,
+        love.graphics.getHeight() / constants.INTERNAL_RES_H
+      )
+      self.camera = Camera(constants.INTERNAL_RES_W / 2, constants.INTERNAL_RES_H / 2, scaleFactor)
     end
   end,
 
